@@ -50,6 +50,34 @@ group by c.name
 order by average desc;
 
 
+SELECT f.title,count(r.rental_id) as rentals
+FROM sakila.film as f 
+join sakila.inventory as i using (film_id)
+join sakila.rental as r using (inventory_id)
+group by f.title
+order by rentals desc;
+
+SELECT c.name,sum(p.amount) as moneyz
+FROM sakila.category as c
+join sakila.film_category as fc using (category_id)
+join sakila.inventory as i using (film_id)
+join sakila.rental as r using (inventory_id)
+join sakila.payment as p using (rental_id)
+group by c.name
+order by moneyz desc
+limit 5;
+
+select i.store_id, f.title, count(inventory_id) from sakila.store as s
+join sakila.inventory as i using (store_id)
+join sakila.film as f using (film_id)
+where f.title = 'Academy Dinosaur';
+
+
+
+
+
+
+
 
 
 

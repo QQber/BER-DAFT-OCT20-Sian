@@ -37,5 +37,36 @@ where country_id =
 (select country_id from country 
 where country = 'Canada')));
 
-select title from film where film_id in
-(select film_id in film_actor where  
+select fa.actor_id,fa.film_id,f.title 
+from film_actor as fa 
+join film as f using (film_id) 
+where fa.actor_id = 
+(select actor_id as count from film_actor 
+group by actor_id 
+order by count desc
+limit 1);
+
+select p.customer_id,f.film_id,f.title
+from film as f 
+join inventory as i using (film_id)
+join rental as r using (inventory_id)
+join payment as p using (rental_id)
+where p.customer_id = 
+(select customer_id from payment 
+group by customer_id 
+order by sum(amount) desc
+limit 1);
+
+select p.customer_id,f.film_id,f.title
+from film as f 
+join inventory as i using (film_id)
+join rental as r using (inventory_id)
+join payment as p using (rental_id)
+where p.customer_id in  
+(select customer_id from payment 
+group by customer_id
+having avg(amount) > (select avg(amount) from payment) 
+order by sum(amount) desc);
+
+
+
